@@ -3,6 +3,10 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from sentence_transformers import SentenceTransformer
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.vectorstores import FAISS
+from langchain_ollama import OllamaLLM  # Import corrigé
+from langchain.chains import RetrievalQA
+from langchain.prompts import PromptTemplate
+
 
 # Charger le fichier meta.jsonl
 file_path = '/home/amayas/Bureau/M2 Data/RAG_Ollama/data/meta.jsonl'
@@ -42,7 +46,7 @@ model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 embeddings = model.encode(chunks, convert_to_numpy=False)
 
 # Vérifier un exemple
-print(f"Exemple d'embedding : {embeddings[0]}")
+#print(f"Exemple d'embedding : {embeddings[0]}")
 
 embedding_model = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
 
@@ -69,15 +73,41 @@ faiss_index.save_local('/home/amayas/Bureau/M2 Data/RAG_Ollama/data/faiss_index'
 
 
 # Configurer le système de récupération
-retriever = faiss_index.as_retriever(search_type="similarity", search_kwargs={"k": 5})
+retriever = faiss_index.as_retriever(search_type="similarity", search_kwargs={"k": 10})
+
+# Définir le modèle LLM (Ollama)
+llm = OllamaLLM(model="llama3.2", base_url="http://localhost:11434",temperature = 0.8,top_p = 0.98)
+# Définir un prompt structuré avec PromptTemplate
+prompt_template = """
+Vous êtes un assistant intelligent destiné à répondre aux questions des utilisateurs en utilisant uniquement les informations provenant des documents pertinents fournis. Voici vos instructions :
+- Limitez vos réponses exclusivement aux informations issues des documents fournis ci-dessous.
+- Si vous ne trouvez pas d'information pertinente, répondez explicitement : "Je ne sais pas."
+- Fournissez les passages ou documents spécifiques d'où vous extrayez les informations.
+- Ne générez pas d'informations sensibles, inappropriées ou incorrectes.
+- Soyez précis et concis dans vos réponses.
+
+Voici les documents pertinents :
+{context}
+
+Question de l'utilisateur :
+{question}
+"""
+PROMPT = PromptTemplate(input_variables=["context", "question"], template=prompt_template)
+print("Prompt généré :", PROMPT)
+
+# Configurer une chaîne RetrievalQA
+qa_chain = RetrievalQA.from_chain_type(
+    llm=llm,
+    chain_type="stuff",  # Combinaison des documents et question
+    retriever=retriever,
+    return_source_documents=True,
+    chain_type_kwargs={"prompt": PROMPT}
+)
 
 # Exemple de requête utilisateur
-query = "extratereste" # Une requête d'exemple
-results = retriever.get_relevant_documents(query)  # Récupérer les documents pertinents
+query = "tell me about OnePlus 6T"  # Exemple de question
+response = qa_chain({"query": query})
 
-# Afficher les résultats de récupération
-print("Résultats de recherche :")
-for idx, doc in enumerate(results):
-    print(f"\nRésultat {idx + 1} :")
-    print(f"Texte : {doc.page_content}")
-    print(f"Métadonnées : {doc.metadata}")
+# Afficher la réponse
+print("\nRéponse générée :")
+print(response["result"])
