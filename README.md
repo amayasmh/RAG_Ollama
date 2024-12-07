@@ -105,29 +105,29 @@ Cela ouvrira une interface web accessible à l'adresse http://localhost:8501.
 
 Fonctionnement de l'interface
 
-Historique des messages :
+- Historique des messages :
     L'historique des messages est affiché dans un format clair avec l'heure d'envoi visible à droite.
-Saisie utilisateur :
+- Saisie utilisateur :
     Posez des questions dans le champ de saisie.
     Vous pouvez envoyer une question en appuyant sur Entrée ou sur le bouton Envoyer.
-Réponses intelligentes :
+- Réponses intelligentes :
     Le chatbot répond immédiatement avec des informations pertinentes tirées des documents.
     Pour des salutations comme "Bonjour", le bot répondra avec "Bonjour ! Comment puis-je vous aider ?".
 
 ### Structure du projet
 
 RAG_Ollama/
-├── data/
-│   ├── meta.jsonl          # Données brutes pour créer la base vectorielle
-│   ├── faiss_index/
-│       ├── index.faiss     # Index FAISS pour la recherche
-│       ├── index.pkl       # Métadonnées pour FAISS
-├── src/
-│   ├── Ollama.py           # Script principal pour exécuter le chatbot
-├── requirements.txt        # Fichier des dépendances
-├── README.md               # Documentation du projet
+* ├── data/
+* │   ├── meta.jsonl          # Données brutes pour créer la base vectorielle
+* │   ├── faiss_index/
+* │   *   ├── index.faiss     # Index FAISS pour la recherche
+* │   *    ├── index.pkl       # Métadonnées pour FAISS
+* ├── src/
+* │   ├── Ollama.py           # Script principal pour exécuter le chatbot
+* ├── requirements.txt        # Fichier des dépendances
+* ├── README.md               # Documentation du projet
 
 ### Auteurs:
 
-Aghiles SAGHIR
-Amayas MAHMOUDI
+##### Aghiles SAGHIR
+##### Amayas MAHMOUDI
