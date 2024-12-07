@@ -48,67 +48,73 @@ Clonez le projet à partir du dépôt Git :
 ```bash
 git clone https://github.com/votre-utilisateur/RAG_Ollama.git
 cd RAG_Ollama
+```
 
 Étape 2 : Créer un environnement virtuel
 
 Créez un environnement Python virtuel pour isoler les dépendances :
 
-
+```bash
 python3 -m venv env
 source env/bin/activate  # Linux/macOS
 # .\\env\\Scripts\\activate  # Windows
+```
 
-Étape 3 : Installer les dépendances
+### Étape 3 : Installer les dépendances
 
 Installez toutes les bibliothèques nécessaires à partir du fichier requirements.txt :
 
-
+```bash
 pip install -r requirements.txt
+```
 
-Étape 4 : Configurer Ollama
+### Étape 4 : Configurer Ollama
 
-    Installer Ollama CLI : Suivez les instructions disponibles sur Ollama.
-    Télécharger le modèle llama3.2 :
+Installer Ollama CLI : Suivez les instructions disponibles sur Ollama.
+Télécharger le modèle llama3.2 :
 
-
+```bash
 ollama pull llama3.2
+```
 
 Lancer le serveur Ollama :
 
+```bash
+ollama serve
+```
 
-    ollama serve
+Vérifiez que le serveur est actif sur http://localhost:11434.
 
-    Vérifiez que le serveur est actif sur http://localhost:11434.
+### Étape 5 : Préparer la base vectorielle FAISS
 
-Étape 5 : Préparer la base vectorielle FAISS
+Assurez-vous que le dossier data/faiss_index contient les fichiers suivants :
+index.faiss
+index.pkl
 
-    Assurez-vous que le dossier data/faiss_index contient les fichiers suivants :
-        index.faiss
-        index.pkl
+Si ces fichiers ne sont pas présents, ils seront générés automatiquement lors de la première exécution si le fichier meta.jsonl est correctement configuré.
 
-    Si ces fichiers ne sont pas présents, ils seront générés automatiquement lors de la première exécution si le fichier meta.jsonl est correctement configuré.
-
-Lancement du projet
+### Lancement du projet
 
 Une fois toutes les étapes de configuration terminées, exécutez le projet avec Streamlit :
 
-
+```bash
 streamlit run src/Ollama.py
+```
 
 Cela ouvrira une interface web accessible à l'adresse http://localhost:8501.
+
 Fonctionnement de l'interface
 
-    Historique des messages :
-        L'historique des messages est affiché dans un format clair avec l'heure d'envoi visible à droite.
-    Saisie utilisateur :
-        Posez des questions dans le champ de saisie.
-        Vous pouvez envoyer une question en appuyant sur Entrée ou sur le bouton Envoyer.
-    Réponses intelligentes :
-        Le chatbot répond immédiatement avec des informations pertinentes tirées des documents.
-        Pour des salutations comme "Bonjour", le bot répondra avec "Bonjour ! Comment puis-je vous aider ?".
+Historique des messages :
+    L'historique des messages est affiché dans un format clair avec l'heure d'envoi visible à droite.
+Saisie utilisateur :
+    Posez des questions dans le champ de saisie.
+    Vous pouvez envoyer une question en appuyant sur Entrée ou sur le bouton Envoyer.
+Réponses intelligentes :
+    Le chatbot répond immédiatement avec des informations pertinentes tirées des documents.
+    Pour des salutations comme "Bonjour", le bot répondra avec "Bonjour ! Comment puis-je vous aider ?".
 
-Structure du projet
-
+### Structure du projet
 
 RAG_Ollama/
 ├── data/
@@ -121,6 +127,7 @@ RAG_Ollama/
 ├── requirements.txt        # Fichier des dépendances
 ├── README.md               # Documentation du projet
 
-Auteurs:
+### Auteurs:
+
 Aghiles SAGHIR
 Amayas MAHMOUDI
